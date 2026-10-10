@@ -222,9 +222,7 @@
     $("drawerTitle").textContent = view === "confirm" ? "Confirmation" : "Envoyer des Robux";
     if (view === "search") setTimeout(() => input.focus(), 40);
   }
-  $("openSend").addEventListener("click", openDrawer);
-  $("openSendTop").addEventListener("click", openDrawer);
-  $("openSend2").addEventListener("click", openDrawer);
+ $("openSendTop").addEventListener("click", openDrawer);
   $("closeDrawer").addEventListener("click", closeDrawer);
   backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeDrawer(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
