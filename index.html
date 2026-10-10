@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robux Hub — Démo indépendante</title>
+  <style>
+    :root{--bg:#111216;--panel:#1b1d23;--panel2:#252832;--blue:#335fff;--blue2:#244de0;--muted:#9ba3b4;--line:#30333c;--text:#f4f6fb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}
+    button,input{font:inherit}button{cursor:pointer} .topbar{height:56px;background:#092b52;border-bottom:1px solid #173b62;display:flex;align-items:center;gap:28px;padding:0 22px;position:sticky;top:0;z-index:5}
+    .brand{font-weight:900;color:#fff;font-size:20px;letter-spacing:-1px;white-space:nowrap}.brand span{color:#ff4b55}.nav{display:flex;gap:26px;color:#e7efff;font-size:13px}.nav a{color:inherit;text-decoration:none;opacity:.9}
+    .top-search{margin-left:auto;max-width:370px;width:30%;background:#173b62;border:1px solid #34577c;border-radius:7px;padding:9px 12px;color:white;outline:none}.top-search::placeholder{color:#b7c8df}
+    .layout{display:flex;min-height:calc(100vh - 56px)}.sidebar{width:190px;flex-shrink:0;background:#09294b;border-right:1px solid #1a3b5f;padding:20px 12px}.side-user{display:flex;align-items:center;gap:9px;padding:0 8px 22px;color:#dbe8fa;font-size:12px}.dot{width:12px;height:12px;background:#71839a;border-radius:50%}.side-link{display:flex;align-items:center;gap:11px;color:#d7e3f5;text-decoration:none;padding:11px 9px;border-radius:6px;font-size:12px}.side-link:hover,.side-link.active{background:#123b66}.side-link .ico{width:17px;text-align:center;font-size:15px}
+    main{flex:1;min-width:0;padding:32px 28px 50px}.page-wrap{max-width:980px;margin:0 auto}.hero{height:180px;border-radius:12px;background:radial-gradient(ellipse at 50% 0%,#263d68 0%,#171a24 52%,#14151a 100%);display:flex;align-items:center;justify-content:center;text-align:center;margin-bottom:28px;position:relative;overflow:hidden;border:1px solid #252a36}.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:24px 24px;transform:perspective(300px) rotateX(20deg) scale(1.4);opacity:.4}.hero-content{position:relative}.hero h1{font-size:clamp(25px,3vw,40px);line-height:1.1;margin:0 0 12px;font-weight:800;letter-spacing:-1px}.hero p{color:#c7d0e1;margin:0 0 20px}.primary{background:var(--blue);border:0;color:white;border-radius:7px;padding:12px 18px;font-weight:700;transition:.15s}.primary:hover{background:var(--blue2);transform:translateY(-1px)}.secondary{background:#2b2e38;border:1px solid #3b3f4a;color:#f5f6fa;border-radius:7px;padding:11px 15px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.section-head h2{font-size:19px;margin:0}.muted{color:var(--muted)}.content-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(250px,.7fr);gap:20px}.panel{background:var(--panel);border:1px solid #272a33;border-radius:11px;padding:18px}.panel h3{font-size:16px;margin:0 0 6px}.panel p{color:var(--muted);line-height:1.5}.offer-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}.offer{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;background:#242730;padding:12px 13px;border-radius:7px}.offer-amount{font-weight:800;font-size:15px}.offer small{display:block;color:#9da5b6;font-size:11px;margin-top:4px}.offer .price{background:#30343f;padding:9px 15px;border-radius:5px;font-size:12px;min-width:88px;text-align:center;color:#e1e5ef}.quick-actions{display:grid;gap:10px;margin-top:18px}.quick-actions button{width:100%}.faq{margin-top:22px}.faq h2{font-size:18px}.faq details{background:#17191f;border:1px solid #2b2e36;border-radius:7px;padding:14px 15px;margin:8px 0;color:#dce1ed}.faq summary{cursor:pointer}.faq p{margin-bottom:0;font-size:13px}.footer{text-align:center;color:#777f90;font-size:11px;padding:32px 0 10px}
+    .modal-backdrop{position:fixed;inset:0;background:#0009;z-index:20;display:none;justify-content:flex-end}.modal-backdrop.open{display:flex}.drawer{width:min(470px,100%);height:100%;background:#f7f7f9;color:#242630;box-shadow:-15px 0 45px #0004;display:flex;flex-direction:column;animation:slide .18s ease-out}.drawer-header{display:flex;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid #e2e3e8;font-size:20px;font-weight:600}.drawer-header .robux-mark{font-size:23px;color:#515968}.drawer-header .balance{margin-left:auto;font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}.close{border:0;background:transparent;color:#353844;font-size:27px;line-height:1;padding:0 0 2px 8px}.search-area{padding:14px 18px 8px}.searchbox{display:flex;align-items:center;gap:10px;border:1px solid #d8dae1;border-radius:25px;padding:11px 14px;background:#fff}.searchbox span{font-size:20px;color:#616775}.searchbox input{width:100%;border:0;outline:0;background:transparent;color:#22242b;font-size:14px}.friends-title{padding:9px 18px 7px;font-size:14px;font-weight:600;color:#4d515d}.results{overflow:auto;padding:0 10px 14px;flex:1}.player{display:flex;align-items:center;gap:13px;padding:9px 9px;border-radius:9px;cursor:pointer;color:#272a32}.player:hover{background:#e8eaf0}.avatar{width:48px;height:48px;border-radius:50%;background:#e1e4ea;object-fit:cover;flex-shrink:0}.player-name{font-size:14px}.player-display{font-size:12px;color:#777e8c;margin-top:3px}.state{padding:18px;color:#707685;text-align:center;line-height:1.5}.drawer-content{padding:24px 13px 28px;display:flex;flex-direction:column;align-items:center;flex:1;overflow:auto}.selected-avatar{width:76px;height:76px;border-radius:50%;object-fit:cover;background:#e2e4ea;margin-top:12px}.selected-name{font-weight:600;margin-top:12px}.amount-display{font-size:44px;letter-spacing:-1px;margin:24px 0 20px;display:flex;align-items:center;gap:8px;color:#22252d}.robux-symbol{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border:3px solid currentColor;border-radius:6px;transform:rotate(0deg);font-size:0;position:relative}.robux-symbol:after{content:"";width:7px;height:7px;border:2px solid currentColor;transform:rotate(0deg)}.amount-options{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;width:100%;max-width:370px}.amount-btn{padding:12px 4px;border-radius:8px;border:1px solid transparent;background:#e2e4e9;color:#30333c;font-weight:600}.amount-btn.selected{background:#f7f7f9;border-color:#5b606e;box-shadow:inset 0 0 0 1px #5b606e}.custom-label{width:100%;max-width:370px;margin-top:18px;font-size:12px;color:#616775}.custom-amount{margin-top:7px;width:100%;border:1px solid #d4d6de;border-radius:8px;background:#fff;padding:12px;color:#252832;outline-color:#335fff}.drawer-bottom{padding:12px 13px 26px;text-align:center}.drawer-bottom .primary{width:100%;padding:13px;font-weight:600;font-size:14px}.drawer-bottom small{display:block;color:#646a78;margin-top:12px;font-size:11px}.notice{width:100%;max-width:390px;background:#fff1d7;color:#74521b;border:1px solid #f1d9a8;border-radius:8px;padding:12px;margin-top:18px;font-size:12px;line-height:1.5}.confirm-card{width:100%;max-width:390px;border:1px solid #e0e2e8;border-radius:10px;padding:15px;margin-top:24px}.confirm-row{display:flex;justify-content:space-between;gap:12px;margin:11px 0;font-size:13px}.confirm-row strong{text-align:right}.confirm-actions{display:grid;gap:9px;width:100%;max-width:390px;margin-top:auto;padding-top:20px}.confirm-actions .secondary,.confirm-actions .primary{width:100%}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#242832;color:white;border:1px solid #444955;border-radius:9px;padding:12px 16px;z-index:40;display:none;max-width:90%;box-shadow:0 8px 25px #0005}.toast.show{display:block}@keyframes slide{from{transform:translateX(30px);opacity:.7}to{transform:translateX(0);opacity:1}}
+    @media(max-width:800px){.sidebar{width:58px;padding:14px 6px}.side-user{justify-content:center;padding:0 0 18px}.side-user span:not(.dot),.side-link span:not(.ico){display:none}.side-link{justify-content:center;padding:12px 3px}.topbar{gap:14px;padding:0 12px}.nav{display:none}.top-search{width:45%}main{padding:18px 12px}.content-grid{grid-template-columns:1fr}.hero{height:160px}.hero h1{font-size:27px}}
+    @media(max-width:440px){.sidebar{display:none}.top-search{width:40%}.brand{font-size:17px}.hero{padding:15px}.amount-options{grid-template-columns:repeat(4,1fr)}.amount-btn{font-size:12px}.drawer-header{font-size:18px}}
+  
+    /* Layout tuned to the supplied reference screenshot */
+    body{background:#111113;font-family:Arial,Helvetica,sans-serif}
+    .topbar{height:23px;padding:0 8px;gap:34px;background:#191a1f;border-bottom:1px solid #292a30}
+    .brand{font-size:15px;letter-spacing:-.8px;width:102px}
+    .nav{font-size:9px;gap:70px}
+    .top-search{height:16px;padding:2px 8px;border-radius:4px;font-size:9px;max-width:430px;width:27%;background:#202127;border-color:#30323a}
+    .layout{min-height:calc(100vh - 23px)}
+    .sidebar{width:170px;background:#111216;border-right:1px solid #24252a;padding:9px 6px}
+    .side-user{font-size:9px;padding:0 6px 10px;gap:7px}
+    .dot{width:10px;height:10px}
+    .side-link{font-size:9px;padding:7px 5px;gap:8px;border-radius:4px;color:#e2e3e8}
+    .side-link .ico{font-size:12px;width:13px}
+    main{padding:0 16px 10px;min-height:calc(100vh - 23px)}
+    .page-wrap{width:min(470px,100%);max-width:470px;margin:0 auto;position:relative;padding-top:0;min-height:calc(100vh - 23px)}
+    .balance-pill{position:absolute;top:8px;right:-2px;display:flex;align-items:center;gap:6px;border-radius:22px;background:#1d1e24;padding:5px 11px;font-size:11px;color:#f2f3f6;z-index:2}
+    .balance-pill button{background:#2b2c33;color:#f1f2f5;border:0;border-radius:5px;font-size:8px;padding:4px 8px}
+    .mini-symbol{width:11px;height:11px;border-width:1.5px}
+    .mini-symbol:after{width:3px;height:3px;border-width:1px}
+    .hero{height:157px;border:0;border-radius:0;background:transparent;margin:0;overflow:visible}
+    .hero:before{inset:0 -20px;opacity:.28;background-size:13px 13px;transform:perspective(300px) rotateX(20deg) scale(1.1)}
+    .hero-content{padding-top:66px}
+    .hero h1{font-size:29px;line-height:1.08;margin:0;font-weight:800;letter-spacing:-.8px}
+    .old-percent{color:#747887;text-decoration:line-through;font-weight:500}
+    .offers-section{width:100%;margin:8px auto 0}
+    .offers-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .offers-heading h2{font-size:14px;margin:0 0 3px;font-weight:700}
+    .offers-heading p{font-size:9px;color:#d1d2d7;margin:0}
+    .time-pill{font-size:8px;font-weight:700;background:#f0f0f2;color:#24252b;border-radius:12px;padding:3px 8px;white-space:nowrap}
+    .offer-list{gap:0;background:#191a20;border-radius:9px;padding:7px 11px;margin:0}
+    .offer{grid-template-columns:1fr 123px;gap:10px;padding:5px 0;background:transparent;border-radius:0;min-height:30px}
+    .offer-left{display:flex;align-items:center;gap:12px;min-width:0}
+    .offer-amount{font-size:14px;white-space:nowrap;font-weight:700}
+    .offer-amount del{font-size:9px;color:#858995;font-weight:400}
+    .offer small{display:inline-block;margin:0;background:#252730;color:#b6bac5;border-radius:9px;padding:3px 6px;font-size:7px;white-space:nowrap}
+    .price{font-size:9px;padding:7px 9px;min-width:0;border-radius:5px;background:#30313a;color:#f0f0f4;font-weight:700}
+    .price.highlighted{background:#315bff;color:#fff}
+    .faq{margin:22px 0 0}
+    .faq h2{font-size:14px;margin:0 0 9px}
+    .faq details{background:transparent;border:1px solid #292a30;border-radius:5px;padding:9px 8px;margin:7px 0;font-size:9px;color:#f0f0f3}
+    .faq summary{list-style:none;position:relative;padding-right:15px}
+    .faq summary::-webkit-details-marker{display:none}
+    .faq summary:after{content:"⌄";position:absolute;right:0;top:-2px;color:#a9abb3;font-size:13px}
+    .faq p{font-size:9px;color:#aeb1ba;line-height:1.5}
+    .site-footer{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:min(650px,120%);text-align:center;color:#c6c7cd;font-size:8px;line-height:2.2}
+    .footer-bottom{border-top:1px solid #34353b;margin-top:10px;padding:10px 4px 0;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .footer-bottom span{border:1px solid #4a4c55;border-radius:5px;padding:4px 9px;white-space:nowrap}
+    .footer-bottom small{font-size:6px;line-height:1.5;color:#999ba4;text-align:left}
+    .faq details p{margin:8px 0 0}
+    @media(max-width:800px){
+      .topbar{gap:12px}.brand{width:auto}.nav{display:none}.top-search{width:38%}
+      .sidebar{width:145px;padding:8px 5px}.side-link{font-size:10px}
+      main{padding:0 12px 130px}.page-wrap{width:min(470px,100%);min-height:calc(100vh - 23px)}
+      .hero h1{font-size:clamp(22px,5vw,29px)}.offer{grid-template-columns:1fr 90px}.offer-left{gap:6px}.offer-amount{font-size:12px}.offer small{font-size:6px}
+      .site-footer{position:static;transform:none;width:100%;margin-top:110px}
+    }
+    @media(max-width:520px){
+      .sidebar{display:none}.top-search{margin-left:auto;width:44%}.page-wrap{padding-top:0}
+      .balance-pill{right:0;top:7px}.hero{height:145px}.hero-content{padding-top:60px}
+      .offer-list{padding:6px 7px}.offer{grid-template-columns:1fr 76px}.offer-amount{font-size:11px}.offer-amount del{font-size:8px}.offer small{display:none}
+      .offers-heading h2{font-size:12px}.time-pill{font-size:7px}
+    }
+
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span>ROB</span>LOX</div>
+  <nav class="nav"><a href="#">Charts</a><a href="#">Marketplace</a><a href="#">Créer</a><a href="#robux">Robux</a></nav>
+  <input class="top-search" placeholder="⌕  Rechercher" aria-label="Rechercher sur le site">
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-user"><span class="dot"></span><span>Visiteur · Démo</span></div>
+    <a class="side-link active" href="#"><span class="ico">⌂</span><span>Accueil</span></a>
+    <a class="side-link" href="#"><span class="ico">♙</span><span>Profil</span></a>
+    <a class="side-link" href="#"><span class="ico">⬡</span><span>Roblox Plus</span></a>
+    <a class="side-link" href="#"><span class="ico">▤</span><span>Messages</span></a>
+    <a class="side-link" href="#"><span class="ico">♧</span><span>Amis</span></a>
+    <a class="side-link" href="#"><span class="ico">♟</span><span>Avatar</span></a>
+    <a class="side-link" href="#"><span class="ico">▣</span><span>Inventaire</span></a>
+    <a class="side-link" href="#"><span class="ico">⇄</span><span>Échange</span></a>
+    <a class="side-link" href="#"><span class="ico">♧</span><span>Communautés</span></a>
+    <a class="side-link" href="#"><span class="ico">▱</span><span>Salle de presse</span></a>
+    <a class="side-link" href="#"><span class="ico">▣</span><span>Boutique officielle</span></a>
+  </aside>
+  <main>
+
+    <div class="page-wrap">
+      <div class="balance-pill"><span class="robux-symbol mini-symbol"></span><strong>8</strong><button id="openSendTop">Envoyer</button></div>
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Obtiens jusqu'à <span class="old-percent">25%</span><br>50 % de Robux en plus</h1>
+        </div>
+      </section>
+      <section class="offers-section">
+        <div class="offers-heading">
+          <div><h2>Bonus en Robux à durée limitée</h2><p>Bonus unique inclus dans le pack</p></div>
+          <span class="time-pill">13 jours restants</span>
+        </div>
+        <div class="offer-list">
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 24 100 <del>⬡ 22 500</del></div><small>◉ Bonus de 1 600</small></div><div class="price">239,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 11 100 <del>⬡ 10 000</del></div><small>◉ Bonus de 1 100</small></div><div class="price">119,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 5 350 <del>⬡ 4 500</del></div><small>◉ Bonus de 850</small></div><div class="price">59,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 3 725 <del>⬡ 3 150</del></div><small>◉ Bonus de 575</small></div><div class="price">39,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 2 100 <del>⬡ 1 700</del></div><small>◉ Bonus de 400　 ◉ Pour toi</small></div><div class="price highlighted">23,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 1 600 <del>⬡ 1 200</del></div><small>◉ Bonus de 400</small></div><div class="price">17,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 1 100 <del>⬡ 800</del></div><small>◉ Bonus de 300</small></div><div class="price">11,99 €</div></div>
+          <div class="offer"><div class="offer-left"><div class="offer-amount">⬡ 600 <del>⬡ 400</del></div><small>◉ Bonus de 200</small></div><div class="price">5,99 €</div></div>
+        </div>
+      </section>
+      <section class="faq">
+        <h2>FAQ</h2>
+        <details><summary>Que sont les Robux ?</summary><p>Les Robux sont la monnaie virtuelle utilisée sur Roblox.</p></details>
+        <details><summary>Où sont mes Robux ?</summary><p>Cette page est une interface de démonstration et ne modifie pas le solde de votre compte Roblox.</p></details>
+        <details><summary>Les Robux expirent-ils ?</summary><p>Consulte les informations officielles de Roblox pour les règles applicables à ton compte.</p></details>
+        <details><summary>Comment utiliser une carte-cadeau ?</summary><p>Utilise uniquement la page officielle de remboursement des cartes-cadeaux Roblox.</p></details>
+      </section>
+      <footer class="site-footer">
+        <div>À propos　 Emplois　 Salle de presse　 Parents　 Acheter des cartes-cadeaux　 Aide　 Conditions　 Accessibilité　 Confidentialité</div>
+        <div>Tes choix en matière de vie privée　　Sitemap</div>
+        <div class="footer-bottom"><span>Français (France)　⌄</span><small>©2026 Roblox Corporation. Roblox, le logo Roblox et Powering Imagination font partie des marques de commerce déposées ou non, aux États-Unis et dans d'autres pays.</small></div>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="backdrop" aria-hidden="true">
+  <section class="drawer" role="dialog" aria-modal="true" aria-label="Envoyer des Robux">
+    <div class="drawer-header"><span class="robux-mark">⬡</span><span id="drawerTitle">Envoyer des Robux</span><span class="balance">⬡ <span>—</span></span><button class="close" id="closeDrawer" aria-label="Fermer">×</button></div>
+    <div id="searchView" style="display:flex;flex-direction:column;min-height:0;flex:1">
+      <div class="search-area"><label class="searchbox"><span>⌕</span><input id="usernameInput" placeholder="Rechercher un pseudo Roblox" autocomplete="off" maxlength="50"></label></div>
+      <div class="friends-title" id="resultsTitle">Mes amis</div>
+      <div class="results" id="results"><div class="state">Entre un nom d'utilisateur Roblox pour rechercher son profil public.</div></div>
+    </div>
+    <div id="amountView" style="display:none;flex:1;min-height:0;flex-direction:column">
+      <div class="drawer-content">
+        <img id="selectedAvatar" class="selected-avatar" alt="Avatar Roblox">
+        <div class="selected-name" id="selectedName"></div>
+        <div class="muted" id="selectedDisplay" style="font-size:12px;margin-top:4px"></div>
+        <div class="amount-display"><span class="robux-symbol"></span><span id="amountText">200</span></div>
+        <div class="amount-options">
+          <button class="amount-btn" data-amount="25">⬡ 25</button>
+          <button class="amount-btn" data-amount="50">⬡ 50</button>
+          <button class="amount-btn" data-amount="100">⬡ 100</button>
+          <button class="amount-btn selected" data-amount="200">⬡ 200</button>
+        </div>
+        <label class="custom-label">Montant personnalisé
+          <input class="custom-amount" id="customAmount" type="number" min="1" max="1000000" step="1" placeholder="Entre un montant entier">
+        </label>
+        <div class="notice">Cette démo ne transfère pas réellement de Robux. La confirmation sert uniquement à présenter le parcours visuel.</div>
+      </div>
+      <div class="drawer-bottom"><button class="primary" id="nextBtn">Suivant</button><small>Aucun Robux n'est envoyé depuis ce prototype.</small></div>
+    </div>
+    <div id="confirmView" style="display:none;flex:1;min-height:0;flex-direction:column">
+      <div class="drawer-content" style="align-items:center">
+        <div style="font-size:42px;margin-top:15px;color:#3d5fda">✓</div>
+        <h2 style="font-size:21px;margin:12px 0 0">Vérifier les détails</h2>
+        <p class="muted" style="text-align:center;font-size:13px;max-width:320px">Voici le récapitulatif de la démo avant de continuer.</p>
+        <div class="confirm-card">
+          <div class="confirm-row"><span class="muted">Destinataire</span><strong id="confirmName"></strong></div>
+          <div class="confirm-row"><span class="muted">Identifiant Roblox</span><strong id="confirmId"></strong></div>
+          <div class="confirm-row"><span class="muted">Montant choisi</span><strong id="confirmAmount"></strong></div>
+          <div class="confirm-row"><span class="muted">État</span><strong>Démo uniquement</strong></div>
+        </div>
+        <div class="notice">Aucun transfert réel ne sera réalisé. Pour envoyer des Robux, utilise une fonctionnalité officielle Roblox disponible pour ton compte.</div>
+        <div class="confirm-actions"><button class="primary" id="finishBtn">Terminer</button><button class="secondary" id="backBtn">Retour au montant</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const backdrop = $("backdrop");
+  const results = $("results");
+  const input = $("usernameInput");
+  let selectedUser = null;
+  let amount = 200;
+  let debounceTimer = null;
+  let requestController = null;
+
+  function toast(message) {
+    const el = $("toast"); el.textContent = message; el.classList.add("show");
+    clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove("show"), 3500);
+  }
+  function openDrawer() {
+    backdrop.classList.add("open");
+    backdrop.setAttribute("aria-hidden", "false");
+    selectedUser = null;
+    input.value = "";
+    $("resultsTitle").textContent = "Mes amis";
+    renderState("Recherche un pseudo Roblox pour afficher son avatar et le sélectionner.");
+    showView("search");
+    input.focus();
+  }
+  function closeDrawer() {
+    backdrop.classList.remove("open"); backdrop.setAttribute("aria-hidden", "true");
+  }
+  function showView(view) {
+    $("searchView").style.display = view === "search" ? "flex" : "none";
+    $("amountView").style.display = view === "amount" ? "flex" : "none";
+    $("confirmView").style.display = view === "confirm" ? "flex" : "none";
+    $("drawerTitle").textContent = view === "confirm" ? "Confirmation" : "Envoyer des Robux";
+    if (view === "search") setTimeout(() => input.focus(), 40);
+  }
+  $("openSend").addEventListener("click", openDrawer);
+  $("openSendTop").addEventListener("click", openDrawer);
+  $("openSend2").addEventListener("click", openDrawer);
+  $("closeDrawer").addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeDrawer(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+  $("learnMore").addEventListener("click", () => document.querySelector(".faq").scrollIntoView({behavior:"smooth"}));
+
+  function renderState(message) { results.innerHTML = ""; const div = document.createElement("div"); div.className = "state"; div.textContent = message; results.appendChild(div); }
+  function makePlayer(user) {
+    const row = document.createElement("div"); row.className = "player"; row.tabIndex = 0; row.setAttribute("role", "button");
+    const img = document.createElement("img"); img.className = "avatar"; img.alt = ""; img.src = user.avatar || ""; img.onerror = () => { img.style.visibility = "hidden"; };
+    const labels = document.createElement("div");
+    const username = document.createElement("div"); username.className = "player-name"; username.textContent = user.name;
+    const display = document.createElement("div"); display.className = "player-display"; display.textContent = user.displayName && user.displayName !== user.name ? user.displayName : "Profil Roblox";
+    labels.append(username, display); row.append(img, labels);
+    const choose = () => { selectedUser = user; $("selectedAvatar").src = user.avatar || ""; $("selectedName").textContent = user.name; $("selectedDisplay").textContent = user.displayName && user.displayName !== user.name ? user.displayName : "Utilisateur Roblox"; $("customAmount").value = ""; setAmount(200); showView("amount"); };
+    row.addEventListener("click", choose); row.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(); } });
+    return row;
+  }
+  async function searchUser(query) {
+    if (requestController) requestController.abort();
+    requestController = new AbortController();
+    const signal = requestController.signal;
+    renderState("Recherche en cours…"); $("resultsTitle").textContent = "Résultats";
+    try {
+      const response = await fetch(`/api/roblox?endpoint=users&username=${encodeURIComponent(query)}`, {signal});
+      if (!response.ok) throw new Error("L'API Roblox ne répond pas correctement.");
+      const data = await response.json();
+      const users = data.data || [];
+      if (!users.length) { renderState("Aucun utilisateur trouvé. Vérifie l'orthographe du pseudo."); return; }
+      results.innerHTML = "";
+      for (const u of users.slice(0, 10)) {
+        let avatar = "";
+        try {
+          const thumbRes = await fetch(`/api/roblox?endpoint=avatar&userId=${encodeURIComponent(u.id)}`, {signal});
+          if (thumbRes.ok) { const thumbData = await thumbRes.json(); avatar = thumbData.data?.[0]?.imageUrl || ""; }
+        } catch (e) { if (e.name === "AbortError") return; }
+        results.appendChild(makePlayer({id:u.id, name:u.name, displayName:u.displayName || u.name, avatar}));
+      }
+    } catch (error) {
+      if (error.name === "AbortError") return;
+      renderState("Impossible de contacter Roblox. Vérifie ta connexion et réessaie.");
+    }
+  }
+  input.addEventListener("input", () => {
+    clearTimeout(debounceTimer);
+    const query = input.value.trim();
+    if (query.length < 3) { $("resultsTitle").textContent = query.length ? "Recherche" : "Mes amis"; renderState(query.length ? "Entre au moins 3 caractères du pseudo Roblox." : "Entre un pseudo Roblox pour rechercher son profil public."); return; }
+    debounceTimer = setTimeout(() => searchUser(query), 400);
+  });
+  function setAmount(value) {
+    amount = Number(value) || 0; $("amountText").textContent = amount.toLocaleString("fr-FR");
+    document.querySelectorAll(".amount-btn").forEach(btn => btn.classList.toggle("selected", Number(btn.dataset.amount) === amount));
+  }
+  document.querySelectorAll(".amount-btn").forEach(btn => btn.addEventListener("click", () => { $("customAmount").value = ""; setAmount(Number(btn.dataset.amount)); }));
+  $("customAmount").addEventListener("input", () => {
+    const value = Number($("customAmount").value);
+    if ($("customAmount").value && Number.isInteger(value) && value > 0 && value <= 1000000) setAmount(value);
+  });
+  $("nextBtn").addEventListener("click", () => {
+    if (!selectedUser) return toast("Sélectionne d'abord un utilisateur.");
+    const custom = $("customAmount").value.trim();
+    if (custom && (!Number.isInteger(Number(custom)) || Number(custom) <= 0 || Number(custom) > 1000000)) return toast("Entre un nombre entier valide.");
+    if (!Number.isInteger(amount) || amount <= 0) return toast("Choisis un montant valide.");
+    $("confirmName").textContent = selectedUser.name;
+    $("confirmId").textContent = selectedUser.id;
+    $("confirmAmount").textContent = amount.toLocaleString("fr-FR") + " Robux";
+    showView("confirm");
+  });
+  $("backBtn").addEventListener("click", () => showView("amount"));
+  $("finishBtn").addEventListener("click", () => { toast("Démo terminée : aucun Robux n'a été transféré."); closeDrawer(); });
+})();
+</script>
+</body>
+</html>
